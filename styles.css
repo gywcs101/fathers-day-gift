@@ -890,23 +890,32 @@ body.is-opening .envelope {
   --glow: rgba(201, 147, 56, 0.36);
 }
 
-.hands-shadow {
+.hands-frame {
   position: absolute;
   left: 50%;
   top: 51%;
-  width: min(74rem, 116vw);
+  width: min(48rem, 74vw);
   height: min(42rem, 74vh);
-  object-fit: cover;
-  object-position: 50% 43%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
+  overflow: hidden;
   transform: translate(-50%, calc(-50% + 4rem)) scale(0.94);
+  opacity: 0;
   transition:
     opacity 900ms var(--ease-enter),
     transform 1100ms var(--ease-enter);
 }
 
-.scene-hands.is-visible .hands-shadow {
+.hands-shadow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  height: 112%;
+  object-fit: cover;
+  object-position: 50% 43%;
+  transform: translate(-50%, -50%);
+}
+
+.scene-hands.is-visible .hands-frame {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
   animation: handBreath 4400ms ease-in-out 880ms infinite;
@@ -1251,10 +1260,15 @@ body.is-opening .envelope {
     height: 59vh;
   }
 
-  .hands-shadow {
+  .hands-frame {
     top: 43%;
-    width: 148vw;
+    width: 84vw;
     height: 72vh;
+  }
+
+  .hands-shadow {
+    width: 172%;
+    height: 112%;
   }
 
   .final-copy h1 {
