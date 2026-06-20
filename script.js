@@ -15,10 +15,16 @@ let revealTimer = 0;
 let musicStarted = false;
 let musicPlayPending = false;
 let activeSceneIndex = 0;
-let mobilePaging = false;
+let controlledPaging = false;
+let pagingUnlockTimer = 0;
+let wheelDeltaY = 0;
+let wheelResetTimer = 0;
 let touchStartY = 0;
 let touchStartX = 0;
 let touchStartTime = 0;
+const wheelThreshold = 72;
+const pagingLockMs = reduceMotion ? 300 : 980;
+const wheelQuietMs = 220;
 
 if (music) {
   music.volume = 0.46;
@@ -186,7 +192,7 @@ music?.addEventListener("ended", syncMusicButton);
 
 replayButton?.addEventListener("click", () => {
   envelopeOpening = false;
-  mobilePaging = false;
+  controlledPaging = false;
   document.documentElement.classList.remove("is-mobile-paging");
   envelope?.classList.remove("is-open");
   document.body.classList.add("is-locked");
@@ -206,7 +212,7 @@ dots.forEach((dot, index) => {
     }
     if (index === 0) {
       envelopeOpening = false;
-      mobilePaging = false;
+      controlledPaging = false;
       document.documentElement.classList.remove("is-mobile-paging");
       envelope?.classList.remove("is-open");
       document.body.classList.add("is-locked");
@@ -223,7 +229,7 @@ window.addEventListener("scroll", () => {
     setActiveScene("letter");
     return;
   }
-  if (mobilePaging || mobileQuery.matches) return;
+  if (controlledPaging || mobileQuery.matches) return;
   if (performance.now() < scrollRevealLockUntil) return;
   const index = Math.max(0, Math.min(scenes.length - 1, Math.round(window.scrollY / window.innerHeight)));
   const scene = scenes[index];
@@ -231,17 +237,54 @@ window.addEventListener("scroll", () => {
 }, { passive: true });
 
 function pageByStep(direction) {
-  if (mobilePaging || document.body.classList.contains("is-locked")) return;
+  if (controlledPaging || document.body.classList.contains("is-locked")) return;
   const nextIndex = Math.max(1, Math.min(scenes.length - 1, activeSceneIndex + direction));
   if (nextIndex === activeSceneIndex) return;
-  mobilePaging = true;
+  controlledPaging = true;
+  wheelDeltaY = 0;
+  window.clearTimeout(wheelResetTimer);
   document.documentElement.classList.add("is-mobile-paging");
   scrollToScene(scenes[nextIndex].id, { behavior: "auto" });
-  window.setTimeout(() => {
-    mobilePaging = false;
-    document.documentElement.classList.remove("is-mobile-paging");
-  }, reduceMotion ? 260 : 820);
+  schedulePagingUnlock(scenes[nextIndex]);
 }
+
+function schedulePagingUnlock(scene, delay = pagingLockMs) {
+  window.clearTimeout(pagingUnlockTimer);
+  pagingUnlockTimer = window.setTimeout(() => {
+    jumpTo(scene.offsetTop);
+    controlledPaging = false;
+    document.documentElement.classList.remove("is-mobile-paging");
+  }, delay);
+}
+
+window.addEventListener("wheel", (event) => {
+  if (event.ctrlKey) return;
+  if (document.body.classList.contains("is-locked")) {
+    event.preventDefault();
+    return;
+  }
+
+  const absY = Math.abs(event.deltaY);
+  const absX = Math.abs(event.deltaX);
+  if (absY < 1 || absX > absY * 1.25) return;
+
+  event.preventDefault();
+  if (controlledPaging) {
+    const scene = scenes[activeSceneIndex];
+    if (scene) schedulePagingUnlock(scene, wheelQuietMs);
+    return;
+  }
+
+  wheelDeltaY += event.deltaY;
+  window.clearTimeout(wheelResetTimer);
+  wheelResetTimer = window.setTimeout(() => {
+    wheelDeltaY = 0;
+  }, 180);
+
+  if (Math.abs(wheelDeltaY) >= wheelThreshold) {
+    pageByStep(wheelDeltaY > 0 ? 1 : -1);
+  }
+}, { passive: false });
 
 window.addEventListener("touchstart", (event) => {
   if (!mobileQuery.matches || event.touches.length !== 1) return;

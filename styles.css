@@ -22,7 +22,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: none;
   background: var(--paper);
   overscroll-behavior-y: contain;
 }
