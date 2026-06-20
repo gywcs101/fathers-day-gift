@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>父亲节快乐</title>
+    <meta name="description" content="一封写给父亲的沉浸式父亲节网页信笺。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@500;600&family=ZCOOL+XiaoWei&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="is-locked">
+    <canvas class="motes" id="motes" aria-hidden="true"></canvas>
+    <div class="paper-glow" aria-hidden="true"></div>
+    <div class="letter-flash" aria-hidden="true"></div>
+    <audio id="background-music" preload="auto" loop>
+      <source src="./Summer-久石譲.mp3" type="audio/mpeg" />
+    </audio>
+
+    <button class="music-toggle" type="button" aria-label="播放音乐" aria-pressed="false">
+      <span class="music-icon" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+    </button>
+
+    <nav class="progress" aria-label="页面进度">
+      <a href="#letter" aria-label="信笺入口" class="progress-dot is-active"></a>
+      <a href="#watch" aria-label="时间与陪伴" class="progress-dot"></a>
+      <a href="#tools" aria-label="工具箱" class="progress-dot"></a>
+      <a href="#shirt" aria-label="整理衣衫" class="progress-dot"></a>
+      <a href="#hands" aria-label="大手和小手" class="progress-dot"></a>
+      <a href="#wish" aria-label="父亲节快乐" class="progress-dot"></a>
+    </nav>
+
+    <main>
+      <section id="letter" class="scene scene-letter is-visible" data-scene="letter">
+        <div class="scene-visual letter-visual">
+          <button class="envelope" type="button" aria-label="打开父亲节信笺">
+            <span class="envelope-back"></span>
+            <span class="letter-sheet">
+              <i></i>
+              <i></i>
+              <i></i>
+            </span>
+            <span class="envelope-flap"></span>
+            <span class="envelope-left"></span>
+            <span class="envelope-right"></span>
+            <span class="envelope-greeting">父亲节快乐</span>
+            <span class="wax-seal"></span>
+          </button>
+        </div>
+      </section>
+
+      <section id="watch" class="scene scene-watch" data-scene="watch">
+        <div class="scene-visual watch-visual" aria-hidden="true">
+          <div class="watch">
+            <span class="watch-ring"></span>
+            <span class="watch-face"></span>
+            <span class="watch-subdial"></span>
+            <span class="hand hour"></span>
+            <span class="hand minute"></span>
+            <span class="hand second"></span>
+            <span class="crown"></span>
+            <i class="tick k1"></i><i class="tick k2"></i><i class="tick k3"></i><i class="tick k4"></i>
+            <i class="tick k5"></i><i class="tick k6"></i><i class="tick k7"></i><i class="tick k8"></i>
+            <i class="tick k9"></i><i class="tick k10"></i><i class="tick k11"></i><i class="tick k12"></i>
+          </div>
+        </div>
+        <div class="scene-copy">
+          <p>他把时间，慢慢让给了家。</p>
+        </div>
+      </section>
+
+      <section id="tools" class="scene scene-tools" data-scene="tools">
+        <div class="scene-visual tools-visual" aria-hidden="true">
+          <div class="toolbox">
+            <span class="box-shadow"></span>
+            <span class="box-lid"></span>
+            <span class="box-body"></span>
+            <span class="box-handle"></span>
+            <span class="screwdriver"></span>
+            <span class="hammer"></span>
+            <span class="wrench"></span>
+            <span class="measuring-tape"></span>
+            <i class="spark sp1"></i>
+            <i class="spark sp2"></i>
+            <i class="spark sp3"></i>
+          </div>
+        </div>
+        <div class="scene-copy">
+          <p>他总能把松动的世界拧紧一点。</p>
+        </div>
+      </section>
+
+      <section id="shirt" class="scene scene-shirt" data-scene="shirt">
+        <div class="scene-visual shirt-visual" aria-hidden="true">
+          <div class="shirt">
+            <span class="collar left"></span>
+            <span class="collar right"></span>
+            <span class="shirt-body"></span>
+            <span class="shirt-placket"></span>
+            <span class="button b1"></span>
+            <span class="button b2"></span>
+            <span class="button b3"></span>
+            <span class="tie-knot"></span>
+            <span class="tie-blade"></span>
+          </div>
+        </div>
+        <div class="scene-copy">
+          <p>很多清晨，他先把自己整理好。</p>
+        </div>
+      </section>
+
+      <section id="hands" class="scene scene-hands" data-scene="hands">
+        <div class="scene-visual hands-visual" aria-hidden="true">
+          <img class="hands-shadow" src="./assets/hands-warm.png" alt="" />
+        </div>
+        <div class="scene-copy">
+          <p>后来才懂，那只手一直在。</p>
+        </div>
+      </section>
+
+      <section id="wish" class="scene scene-wish" data-scene="wish">
+        <div class="scene-visual wish-visual" aria-hidden="true">
+          <div class="wish-orbit">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="wish-burst">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="final-copy">
+          <h1>父亲节快乐</h1>
+          <p>愿这封信，把光带到他身旁。</p>
+          <button class="replay-button" type="button">再看一遍</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
