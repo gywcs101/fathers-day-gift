@@ -24,7 +24,6 @@ let touchStartX = 0;
 let touchStartTime = 0;
 const wheelThreshold = 72;
 const pagingLockMs = reduceMotion ? 300 : 980;
-const wheelQuietMs = 220;
 const moteCount = mobileQuery.matches ? 18 : 42;
 
 if (music) {
@@ -269,7 +268,7 @@ window.addEventListener("wheel", (event) => {
   event.preventDefault();
   if (controlledPaging) {
     const scene = scenes[activeSceneIndex];
-    if (scene) schedulePagingUnlock(scene, wheelQuietMs);
+    if (scene) schedulePagingUnlock(scene);
     return;
   }
 

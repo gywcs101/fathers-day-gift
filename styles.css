@@ -894,9 +894,8 @@ body.is-opening .envelope {
   position: absolute;
   left: 50%;
   top: 51%;
-  width: min(48rem, 74vw);
-  height: min(42rem, 74vh);
-  overflow: hidden;
+  width: 100vw;
+  height: min(46rem, 76vh);
   transform: translate(-50%, calc(-50% + 4rem)) scale(0.94);
   opacity: 0;
   transition:
@@ -908,10 +907,9 @@ body.is-opening .envelope {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 150%;
-  height: 112%;
-  object-fit: cover;
-  object-position: 50% 43%;
+  width: max(108rem, 168vw);
+  height: auto;
+  max-width: none;
   transform: translate(-50%, -50%);
 }
 
@@ -1262,13 +1260,12 @@ body.is-opening .envelope {
 
   .hands-frame {
     top: 43%;
-    width: 84vw;
-    height: 72vh;
+    width: 100vw;
+    height: 62vh;
   }
 
   .hands-shadow {
-    width: 172%;
-    height: 112%;
+    width: 216vw;
   }
 
   .final-copy h1 {
