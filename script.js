@@ -25,6 +25,7 @@ let touchStartTime = 0;
 const wheelThreshold = 72;
 const pagingLockMs = reduceMotion ? 300 : 980;
 const wheelQuietMs = 220;
+const moteCount = mobileQuery.matches ? 18 : 42;
 
 if (music) {
   music.volume = 0.46;
@@ -77,7 +78,7 @@ function unlockLetter() {
   if (envelopeOpening || envelope?.classList.contains("is-open")) return;
   envelopeOpening = true;
   envelope?.classList.add("is-open");
-  playMusic();
+  if (!musicStarted) playMusic();
   window.setTimeout(() => {
     document.body.classList.add("is-opening");
   }, reduceMotion ? 20 : 520);
@@ -136,7 +137,7 @@ function jumpTo(top) {
 }
 
 envelope?.addEventListener("pointerdown", () => {
-  if (!envelope?.classList.contains("is-open")) playMusic();
+  if (!musicStarted && !envelope?.classList.contains("is-open")) playMusic();
 });
 envelope?.addEventListener("click", unlockLetter);
 
@@ -243,7 +244,6 @@ function pageByStep(direction) {
   controlledPaging = true;
   wheelDeltaY = 0;
   window.clearTimeout(wheelResetTimer);
-  document.documentElement.classList.add("is-mobile-paging");
   scrollToScene(scenes[nextIndex].id, { behavior: "auto" });
   schedulePagingUnlock(scenes[nextIndex]);
 }
@@ -251,9 +251,7 @@ function pageByStep(direction) {
 function schedulePagingUnlock(scene, delay = pagingLockMs) {
   window.clearTimeout(pagingUnlockTimer);
   pagingUnlockTimer = window.setTimeout(() => {
-    jumpTo(scene.offsetTop);
     controlledPaging = false;
-    document.documentElement.classList.remove("is-mobile-paging");
   }, delay);
 }
 
@@ -326,21 +324,15 @@ function resizeCanvas() {
   ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
 }
 
-const motes = Array.from({ length: mobileQuery.matches ? 44 : 120 }, () => ({
+const motes = Array.from({ length: moteCount }, () => ({
   x: Math.random(),
   y: Math.random(),
   r: Math.random() * 2.2 + 0.4,
-  vx: (Math.random() - 0.5) * 0.12,
-  vy: Math.random() * -0.08 - 0.015,
   alpha: Math.random() * 0.18 + 0.05,
   hue: Math.random() > 0.28 ? "201, 147, 56" : "124, 166, 187",
 }));
 
-let last = performance.now();
-
-function draw(now) {
-  const dt = Math.min((now - last) / 16.67, 2);
-  last = now;
+function draw() {
   const w = window.innerWidth;
   const h = window.innerHeight;
 
@@ -348,32 +340,24 @@ function draw(now) {
   ctx.globalCompositeOperation = "source-over";
 
   motes.forEach((mote) => {
-    mote.x += (mote.vx * dt) / w;
-    mote.y += (mote.vy * dt) / h;
-
-    if (mote.x < -0.04) mote.x = 1.04;
-    if (mote.x > 1.04) mote.x = -0.04;
-    if (mote.y < -0.04) mote.y = 1.04;
-
     const x = mote.x * w;
     const y = mote.y * h;
-    const gradient = ctx.createRadialGradient(x, y, 0, x, y, mote.r * 8);
-    gradient.addColorStop(0, `rgba(${mote.hue}, ${mote.alpha})`);
-    gradient.addColorStop(1, `rgba(${mote.hue}, 0)`);
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = `rgba(${mote.hue}, ${mote.alpha})`;
     ctx.beginPath();
-    ctx.arc(x, y, mote.r * 8, 0, Math.PI * 2);
+    ctx.arc(x, y, mote.r * 2.8, 0, Math.PI * 2);
     ctx.fill();
   });
-
-  requestAnimationFrame(draw);
 }
 
 resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+draw();
+window.addEventListener("resize", () => {
+  resizeCanvas();
+  draw();
+});
 
 if (!reduceMotion) {
-  requestAnimationFrame(draw);
+  window.setTimeout(draw, 120);
 }
 
 syncMusicButton();

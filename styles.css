@@ -236,6 +236,14 @@ body.is-opening .letter-flash {
   animation: haloBreath 5200ms ease-in-out infinite;
 }
 
+.scene:not(.is-visible)::before {
+  animation-play-state: paused;
+}
+
+.scene:not(.is-visible) * {
+  animation-play-state: paused !important;
+}
+
 .scene::after {
   content: "";
   position: absolute;
@@ -885,23 +893,21 @@ body.is-opening .envelope {
 .hands-shadow {
   position: absolute;
   left: 50%;
-  top: 52%;
-  width: min(55rem, 86vw);
-  max-height: 70vh;
-  object-fit: contain;
+  top: 51%;
+  width: min(74rem, 116vw);
+  height: min(42rem, 74vh);
+  object-fit: cover;
+  object-position: 50% 43%;
   transform: translate(-50%, -50%);
   opacity: 0;
-  filter: blur(14px) drop-shadow(0 34px 42px rgba(82, 57, 30, 0.22));
   transform: translate(-50%, calc(-50% + 4rem)) scale(0.94);
   transition:
     opacity 900ms var(--ease-enter),
-    transform 1100ms var(--ease-enter),
-    filter 1100ms var(--ease-enter);
+    transform 1100ms var(--ease-enter);
 }
 
 .scene-hands.is-visible .hands-shadow {
   opacity: 1;
-  filter: blur(0) drop-shadow(0 34px 42px rgba(82, 57, 30, 0.22));
   transform: translate(-50%, -50%) scale(1);
   animation: handBreath 4400ms ease-in-out 880ms infinite;
   transition-delay: 180ms;
@@ -1170,7 +1176,7 @@ body.is-opening .envelope {
 
   html.is-mobile-paging,
   html.is-mobile-paging body {
-    overflow: hidden;
+    overscroll-behavior-y: contain;
   }
 
   .music-toggle {
@@ -1247,7 +1253,8 @@ body.is-opening .envelope {
 
   .hands-shadow {
     top: 43%;
-    width: 108vw;
+    width: 148vw;
+    height: 72vh;
   }
 
   .final-copy h1 {
